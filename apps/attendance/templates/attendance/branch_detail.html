@@ -1,0 +1,106 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Back button -->
+        <a href="{% url 'super_admin_dashboard' %}"
+            class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-indigo-600 mb-6 transition-colors">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Dashboard
+        </a>
+
+        <!-- ===== MACRO: Branch Header ===== -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+            <div class="flex items-center gap-4">
+                <div
+                    class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-md">
+                    <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800">{{ branch_data.summary.branch.name }}</h1>
+                    <p class="text-sm text-slate-500">{{ branch_data.summary.total_employees }} employees · Branch
+                        detail overview</p>
+                </div>
+            </div>
+
+            <!-- Macro stat cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6">
+                <div class="bg-slate-50 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-slate-800">{{ branch_data.summary.total_employees }}</p>
+                    <p class="text-xs text-slate-500">Total Staff</p>
+                </div>
+                <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-emerald-600">{{ branch_data.summary.present }}</p>
+                    <p class="text-xs text-emerald-600">Present</p>
+                </div>
+                <div class="bg-rose-50 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-rose-600">{{ branch_data.summary.absent }}</p>
+                    <p class="text-xs text-rose-600">Absent</p>
+                </div>
+                <div class="bg-amber-50 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-amber-600">{{ branch_data.summary.late }}</p>
+                    <p class="text-xs text-amber-600">Late</p>
+                </div>
+                <div class="bg-sky-50 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-sky-600">{{ branch_data.summary.remote }}</p>
+                    <p class="text-xs text-sky-600">Remote</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== MICRO: Employee Table ===== -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100">
+                <h3 class="text-base font-semibold text-slate-800">Employee Attendance Breakdown</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Per-employee attendance records</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-100">
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase">Employee</th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">Present
+                            </th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">Absent</th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">Late</th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">Remote</th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">On Leave
+                            </th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-right">Last Seen
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for emp in branch_data.employees %}
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="py-3 px-6 font-medium text-slate-800">
+                                {{ emp.employee.get_full_name|default:emp.employee.email }}
+                            </td>
+                            <td class="py-3 px-6 text-center text-emerald-600 font-semibold">{{ emp.present }}</td>
+                            <td class="py-3 px-6 text-center text-rose-600 font-semibold">{{ emp.absent }}</td>
+                            <td class="py-3 px-6 text-center text-amber-600 font-semibold">{{ emp.late }}</td>
+                            <td class="py-3 px-6 text-center text-sky-600 font-semibold">{{ emp.remote }}</td>
+                            <td class="py-3 px-6 text-center text-purple-600 font-semibold">{{ emp.leave }}</td>
+                            <td class="py-3 px-6 text-right text-xs text-slate-400">
+                                {{ emp.last_attendance.date|date:"M d, Y"|default:"—" }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="py-10 text-center text-slate-400">No employees found in this branch.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

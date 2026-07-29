@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from .models import User
+
 def login_view(request):
     if request.method == "POST":
         form = LoginForm(request, data=request.POST)
