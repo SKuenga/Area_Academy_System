@@ -2,6 +2,7 @@ from .forms import LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from .models import User
 def login_view(request):
     if request.method == "POST":
@@ -11,7 +12,7 @@ def login_view(request):
             login(request, user)
             role = getattr(user, 'role', None)
             if role == User.Role.SUPER_ADMIN:
-                return HttpResponse("Admin login successful")
+                return redirect('super_admin_dashboard')
             elif role == User.Role.BRANCH_MANAGER:
                 return HttpResponse("Branch Manager login successful")
             else:

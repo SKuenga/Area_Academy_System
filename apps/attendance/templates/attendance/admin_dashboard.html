@@ -1,0 +1,455 @@
+<!-- ============================================ -->
+<!-- AREA Academy Azerbaijan - Attendance Dashboard -->
+<!-- ============================================ -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ==================== HEADER ==================== -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+            <div class="flex items-center gap-4">
+                <!-- Brand icon -->
+                <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-200/50">
+                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800 tracking-tight">AREA Academy</h1>
+                    <p class="text-sm text-slate-500 flex items-center gap-1.5">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Azerbaijan · Attendance Dashboard
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div
+                    class="hidden sm:flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-sm text-slate-600 font-medium" id="current-date-display"></span>
+                </div>
+                <button
+                    class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200/50 transition-all duration-200 active:scale-[0.97] flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== STAT CARDS ==================== -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+            <!-- Total Branches -->
+            <div
+                class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Branches</span>
+                    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-2xl font-bold text-slate-800">{{ total_branches }}</p>
+                <p class="text-xs text-slate-400 mt-0.5">Active branches</p>
+            </div>
+
+            <!-- Total Employees -->
+            <div
+                class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Staff</span>
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-2xl font-bold text-slate-800">{{ total_employees }}</p>
+                <p class="text-xs text-slate-400 mt-0.5">Registered employees</p>
+            </div>
+
+            <!-- Present Today -->
+            <div
+                class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Present</span>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-2xl font-bold text-emerald-600">{{ total_present }}</p>
+                <p class="text-xs text-slate-400 mt-0.5">
+                    {% widthratio total_present total_employees 100 %}% attendance rate
+                </p>
+            </div>
+
+            <!-- Absent Today -->
+            <div
+                class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Absent</span>
+                    <div class="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-2xl font-bold text-rose-600">{{ total_absent }}</p>
+                <p class="text-xs text-slate-400 mt-0.5">Marked absent</p>
+            </div>
+
+        </div>
+
+        <!-- ==================== SECONDARY STAT ROW ==================== -->
+        <div class="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-8">
+
+            <div class="bg-white rounded-xl px-4 py-3 border border-slate-200/60 shadow-sm flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800">{{ total_late|default:"0" }}</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Late</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl px-4 py-3 border border-slate-200/60 shadow-sm flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800">{{ total_remote|default:"0" }}</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Remote</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl px-4 py-3 border border-slate-200/60 shadow-sm flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800">{{ total_leave|default:"0" }}</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">On Leave</p>
+                </div>
+            </div>
+
+            <div
+                class="bg-white rounded-xl px-4 py-3 border border-slate-200/60 shadow-sm flex items-center gap-3 col-span-2 sm:col-span-2">
+                <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between mb-1">
+                        <p class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Overall Attendance
+                        </p>
+                        <p class="text-xs font-bold text-indigo-600">
+                            {% widthratio total_present total_employees 100 %}%
+                        </p>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-1.5">
+                        <div class="bg-gradient-to-r from-indigo-500 to-violet-500 h-1.5 rounded-full transition-all duration-500"
+                            style="width: {% widthratio total_present total_employees 100 %}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== TABLE ==================== -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+            <!-- Table toolbar -->
+            <div
+                class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-base font-semibold text-slate-800">Branch-wise Attendance</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Detailed breakdown per branch</p>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:flex-initial">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" placeholder="Search branch..."
+                            class="pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all w-full sm:w-48">
+                    </div>
+                    <button
+                        class="px-3 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        Filter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-100">
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider">Branch
+                            </th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                Staff</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                Present</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                Absent</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                Late</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                Remote</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                On Leave</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">
+                                Rate</th>
+                            <th scope="col"
+                                class="py-3.5 px-6 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">
+                                Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+
+                        {% for branch in branches %}
+                        <tr class="hover:bg-indigo-50/30 transition-colors duration-150 cursor-pointer group"
+                            onclick="window.location.href='{% url 'branch_detail' branch.branch.id %}'">
+
+                            <!-- Branch -->
+                            <td class="py-3.5 px-6">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 flex items-center justify-center group-hover:from-indigo-100 group-hover:to-violet-100 transition-all">
+                                        <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                    </div>
+                                    <span
+                                        class="font-semibold text-slate-900 group-hover:text-indigo-700 transition-colors">
+                                        {{ branch.branch.name }}
+                                    </span>
+                                </div>
+                            </td>
+
+                            <!-- Staff -->
+                            <td class="py-3.5 px-6 text-center">
+                                <span
+                                    class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-100 text-slate-700 min-w-[2rem]">
+                                    {{ branch.employees }}
+                                </span>
+                            </td>
+
+                            <!-- Present -->
+                            <td class="py-3.5 px-6 text-center">
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    {{ branch.present }}
+                                </span>
+                            </td>
+
+                            <!-- Absent -->
+                            <td class="py-3.5 px-6 text-center">
+                                {% if branch.absent > 0 %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-rose-50 text-rose-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    {{ branch.absent }}
+                                </span>
+                                {% else %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-50 text-slate-400">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                    0
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Late -->
+                            <td class="py-3.5 px-6 text-center">
+                                {% if branch.late > 0 %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                    {{ branch.late }}
+                                </span>
+                                {% else %}
+                                <span class="text-xs text-slate-400">—</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Remote -->
+                            <td class="py-3.5 px-6 text-center">
+                                {% if branch.remote > 0 %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-sky-50 text-sky-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                                    {{ branch.remote }}
+                                </span>
+                                {% else %}
+                                <span class="text-xs text-slate-400">—</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- On Leave -->
+                            <td class="py-3.5 px-6 text-center">
+                                {% if branch.leave > 0 %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-purple-50 text-purple-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                                    {{ branch.leave }}
+                                </span>
+                                {% else %}
+                                <span class="text-xs text-slate-400">—</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Attendance Rate -->
+                            <td class="py-3.5 px-6 text-center">
+                                {% widthratio branch.present branch.employees 100 as rate %}
+                                <div class="flex items-center justify-center gap-2">
+                                    <div class="w-16 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                        <div class="h-full rounded-full transition-all duration-500
+                      {% if rate >= 80 %}bg-emerald-500
+                      {% elif rate >= 60 %}bg-amber-500
+                      {% else %}bg-rose-500{% endif %}" style="width: {{ rate }}%;">
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold
+                    {% if rate >= 80 %}text-emerald-700
+                    {% elif rate >= 60 %}text-amber-700
+                    {% else %}text-rose-700{% endif %}">
+                                        {{ rate }}%
+                                    </span>
+                                </div>
+                            </td>
+
+                            <!-- Action -->
+                            <td class="py-3.5 px-6 text-right">
+                                <span
+                                    class="inline-flex items-center gap-1 text-xs font-medium text-slate-400 group-hover:text-indigo-600 transition-all duration-200">
+                                    Details
+                                    <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </span>
+                            </td>
+
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="py-16 text-center">
+                                <div class="flex flex-col items-center gap-3">
+                                    <svg class="w-14 h-14 text-slate-200" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                    </svg>
+                                    <p class="text-slate-500 font-medium">No branches found</p>
+                                    <p class="text-slate-400 text-sm">Add a branch to start tracking attendance.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table footer -->
+            <div class="px-6 py-3 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                <p class="text-xs text-slate-500">
+                    <span class="font-medium">{{ total_branches }}</span> branch{{ total_branches|pluralize }} ·
+                    Last updated <span id="last-updated-time">just now</span>
+                </p>
+                <div class="flex items-center gap-1">
+                    <button
+                        class="px-2.5 py-1 text-xs font-medium text-slate-500 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors disabled:opacity-40"
+                        disabled>‹</button>
+                    <button
+                        class="px-2.5 py-1 text-xs font-medium text-white bg-indigo-600 border border-indigo-600 rounded-md">1</button>
+                    <button
+                        class="px-2.5 py-1 text-xs font-medium text-slate-500 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors">2</button>
+                    <button
+                        class="px-2.5 py-1 text-xs font-medium text-slate-500 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors">3</button>
+                    <button
+                        class="px-2.5 py-1 text-xs font-medium text-slate-500 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition-colors">›</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== FOOTER ==================== -->
+        <div class="mt-8 text-center">
+            <p class="text-xs text-slate-400">
+                AREA Academy Azerbaijan · Attendance Management System
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==================== DATE SCRIPT ==================== -->
+<script>
+    (function () {
+        var dateEl = document.getElementById('current-date-display');
+        if (dateEl) {
+            var now = new Date();
+            dateEl.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
+        var timeEl = document.getElementById('last-updated-time');
+        if (timeEl) {
+            var now = new Date();
+            timeEl.textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
+    })();
+</script>

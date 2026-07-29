@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.authentication.apps.AuthenticationConfig',
     'apps.branch.apps.BranchConfig',
     'apps.attendance.apps.AttendanceConfig',
+    'apps.class_session.apps.ClassSessionConfig'
 ]
 
 MIDDLEWARE = [

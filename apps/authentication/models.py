@@ -15,5 +15,14 @@ class User(AbstractUser):
         default=Role.EMPLOYEE
     )
 
+    branch = models.ForeignKey(
+    "branch.Branch",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="employees"
+)
+
+
     def __str__(self):
         return self.username
