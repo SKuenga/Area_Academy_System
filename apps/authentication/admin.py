@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
         (
             "AREA Academy",
             {
-                "fields": ("role",),
+                "fields": ("role", "branch"),
             },
         ),
     )
@@ -20,7 +20,7 @@ class CustomUserAdmin(UserAdmin):
         (
             "AREA Academy",
             {
-                "fields": ("role",),
+                "fields": ("role", "branch"),
             },
         ),
     )
@@ -29,5 +29,8 @@ class CustomUserAdmin(UserAdmin):
         "username",
         "email",
         "role",
+        "branch",
         "is_staff",
     )
+
+    list_filter = UserAdmin.list_filter + ("role", "branch")

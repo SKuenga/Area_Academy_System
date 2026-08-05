@@ -2,7 +2,7 @@ from .forms import LoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from .models import User
 from apps.branch.models import Branch
 from apps.authentication.utils import haversion_algo
@@ -83,7 +83,16 @@ def attendance_check_in(request):
 
 @login_required
 def branch_manager_dashboard(request):
-    return HttpResponse("Branch Manager Dashboard")
+    if request.user.role != User.Role.BRANCH_MANAGER:
+        return HttpResponseForbidden("Only branch managers can access this dashboard.")
+
+    if not request.user.branch_id:
+        return HttpResponse(
+            "Your account is not assigned to a branch yet. Please contact the administrator.",
+            status=400,
+        )
+
+    return redirect("branch_detail", branch_id=request.user.branch_id)
 
 
 @login_required
