@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AREA Academy | Attendance Check In</title>
+    <!-- Google Font & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --success: #10B981;
+            --danger: #EF4444;
+            --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #F8FAFC;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(79, 70, 229, 0.15);
+            color: #818CF8;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+            border: 1px solid rgba(129, 140, 248, 0.2);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #FFFFFF;
+        }
+
+        p.subtitle {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        /* Location Icon Display Box */
+        .status-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .status-icon {
+            font-size: 2.5rem;
+            color: #818CF8;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .status-text {
+            font-size: 0.95rem;
+            color: #CBD5E1;
+            line-height: 1.5;
+        }
+
+        .coords {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #94A3B8;
+            margin-top: 6px;
+        }
+
+        /* Button Styling */
+        .btn-checkin {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-checkin:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-checkin:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success & Error State Enhancements */
+        .status-container.success {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .status-container.success .status-icon {
+            color: var(--success);
+            transform: scale(1.1);
+        }
+
+        .status-container.error {
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .status-container.error .status-icon {
+            color: var(--danger);
+        }
+
+        /* Pulse animation for acquiring location */
+        .pulse {
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="brand-badge">
+            <i class="fa-solid fa-graduation-cap"></i> AREA Academy
+        </div>
+        <h1>Attendance Check In</h1>
+        <p class="subtitle">Confirm your location to log attendance</p>
+
+        <!-- FIXED: The id attribute is now cleanly "statusBox" so JavaScript can find it -->
+        <div class="status-container {% if error %}error{% endif %}" id="statusBox">
+            <i class="{% if error %}fa-solid fa-triangle-exclamation status-icon{% else %}fa-solid fa-location-dot status-icon{% endif %}"
+                id="statusIcon"></i>
+            <!-- FIXED: Fixed double quote typo here ""statusText -->
+            <span id="statusText">
+                {% if error %}
+                {{ error }}
+                {% else %}
+                Please check in to log your attendance.
+                {% endif %}
+            </span>
+            <div id="coordsDisplay"></div>
+        </div>
+
+        <!-- Hidden Form -->
+        <form method="POST" id="attendanceForm">
+            {% csrf_token %}
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+
+            <button type="button" class="btn-checkin" id="checkinBtn" onclick="getLocation()">
+                {% if error %}
+                <!-- FIXED: Fixed double quote typo here ""fa-solid -->
+                <i class="fa-solid fa-rotate-right"></i> Try Again
+                {% else %}
+                <i class="fa-solid fa-crosshairs"></i> Get Location and & Check In
+                {% endif %}
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function getLocation() {
+            const btn = document.getElementById("checkinBtn");
+            const statusBox = document.getElementById("statusBox");
+            const statusIcon = document.getElementById("statusIcon");
+            const statusText = document.getElementById("statusText");
+
+            if (!navigator.geolocation) {
+                showError("Geolocation is not supported by your browser.");
+                return;
+            }
+
+            // Update UI to Loading State
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Acquiring Location...`;
+            statusIcon.className = "fa-solid fa-satellite-dish status-icon pulse";
+            statusText.innerText = "Accessing GPS coordinates...";
+
+            navigator.geolocation.getCurrentPosition(
+                success,
+                error,
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        function success(position) {
+            let latitude = position.coords.latitude.toFixed(6);
+            let longitude = position.coords.longitude.toFixed(6);
+
+            // Set hidden inputs
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+
+            // Update UI to Success State
+            const statusBox = document.getElementById("statusBox");
+            const statusIcon = document.getElementById("statusIcon");
+            const statusText = document.getElementById("statusText");
+            const coordsDisplay = document.getElementById("coordsDisplay");
+            const btn = document.getElementById("checkinBtn");
+
+            statusBox.className = "status-container success";
+            statusIcon.className = "fa-solid fa-circle-check status-icon";
+            statusText.innerHTML = "<strong>Location Captured!</strong><br>Redirecting...";
+            coordsDisplay.innerHTML = `Lat: ${latitude} | Lon: ${longitude}`;
+
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Verified`;
+
+            // Wait 1.5 seconds to let the user see the success message before form submission
+            setTimeout(() => {
+                document.getElementById("attendanceForm").submit();
+            }, 1500);
+        }
+
+        function error(err) {
+            let message = "Unable to retrieve your location.";
+            if (err.code === err.PERMISSION_DENIED) {
+                message = "Location access was denied. Please enable permissions.";
+            }
+            showError(message);
+        }
+
+        function showError(message) {
+            const statusBox = document.getElementById("statusBox");
+            const statusIcon = document.getElementById("statusIcon");
+            const statusText = document.getElementById("statusText");
+            const btn = document.getElementById("checkinBtn");
+
+            statusBox.className = "status-container error";
+            statusIcon.className = "fa-solid fa-triangle-exclamation status-icon";
+            statusText.innerText = message;
+
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> Try Again`;
+        }
+    </script>
+
+</body>

@@ -46,7 +46,7 @@ def get_branch_detail(branch_id):
     # --- Micro ---
     employee_details = []
     for emp in employees:
-        emp_attendance = attendance.filter(employee=emp)
+        emp_attendance = attendance.filter(user=emp)
         employee_details.append({
             "employee": emp,
             "present": emp_attendance.filter(status=Attendance.Status.PRESENT).count(),
@@ -54,7 +54,7 @@ def get_branch_detail(branch_id):
             "late": emp_attendance.filter(status=Attendance.Status.LATE).count(),
             "leave": emp_attendance.filter(status=Attendance.Status.ON_LEAVE).count(),
             "remote": emp_attendance.filter(status=Attendance.Status.REMOTE).count(),
-            "last_attendance": emp_attendance.order_by('-date').first(),
+            "last_attendance": emp_attendance.order_by('-check_in_time').first(),
         })
 
     return {

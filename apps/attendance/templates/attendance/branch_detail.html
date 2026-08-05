@@ -88,7 +88,7 @@
                             <td class="py-3 px-6 text-center text-sky-600 font-semibold">{{ emp.remote }}</td>
                             <td class="py-3 px-6 text-center text-purple-600 font-semibold">{{ emp.leave }}</td>
                             <td class="py-3 px-6 text-right text-xs text-slate-400">
-                                {{ emp.last_attendance.date|date:"M d, Y"|default:"—" }}
+                                {{ emp.last_attendance.check_in_time|date:"M d, Y"|default:"-" }}
                             </td>
                         </tr>
                         {% empty %}
