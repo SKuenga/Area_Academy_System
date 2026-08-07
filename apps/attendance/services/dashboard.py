@@ -61,3 +61,20 @@ def get_branch_detail(branch_id):
         "summary": summary,
         "employees": employee_details,
     }
+
+
+def get_employee_attendance_summary(user_id):
+    """Return a summary of attendance for a specific employee."""
+    user = User.objects.get(id=user_id)
+    attendance = Attendance.objects.filter(user=user)
+
+    return {
+        "employee": user,
+        "total_days": attendance.count(),
+        "present": attendance.filter(status=Attendance.Status.PRESENT).count(),
+        "absent": attendance.filter(status=Attendance.Status.ABSENT).count(),
+        "late": attendance.filter(status=Attendance.Status.LATE).count(),
+        "leave": attendance.filter(status=Attendance.Status.ON_LEAVE).count(),
+        "remote": attendance.filter(status=Attendance.Status.REMOTE).count(),
+        "last_attendance": attendance.order_by('-check_in_time').values_list('check_in_time', flat=True).first(),
+    }

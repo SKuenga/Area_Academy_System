@@ -95,6 +95,4 @@ def branch_manager_dashboard(request):
     return redirect("branch_detail", branch_id=request.user.branch_id)
 
 
-@login_required
-def employee_dashboard(request):
-    return HttpResponse("Employee Dashboard")
+
