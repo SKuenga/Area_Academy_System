@@ -81,16 +81,21 @@ WSGI_APPLICATION = 'area_academy.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+from urllib.parse import quote
+import psycopg2
+local_db_name = os.environ.get('DB_NAME', 'area_academy_db')
+password = quote(os.environ.get('DB_PASSWORD', 'anonymousmrbeast@404'))
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    }
+    'default': dj_database_url.config(
+        # Replace the string below with your local PostgreSQL credentials:
+        # postgres://<user>:<password>@<host>:<port>/<dbname>
+        default=os.environ.get(
+            'DATABASE_URL',
+            f'postgres://postgres:{password}@localhost:5432/{local_db_name}'
+        ),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
