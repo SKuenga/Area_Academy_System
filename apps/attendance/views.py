@@ -23,6 +23,13 @@ class SuperAdminDashboard(LoginRequiredMixin, TemplateView):
         context["total_late"]     = sum(b["late"] for b in branches)
         context["total_remote"]   = sum(b["remote"] for b in branches)
         context["total_leave"]    = sum(b["leave"] for b in branches)
+        context["total_attended"] = (
+            context["total_present"] + context["total_late"] + context["total_remote"]
+        )
+        context["total_attendance_rate"] = (
+            round((context["total_attended"] / context["total_employees"]) * 100)
+            if context["total_employees"] else 0
+        )
 
         return context
 
@@ -58,4 +65,3 @@ def employee_dashboard(request):
         "detail": get_employee_attendance_summary(request.user.id)
     }
     return render(request, "attendance/employee_dashboard.html", context=context)
-

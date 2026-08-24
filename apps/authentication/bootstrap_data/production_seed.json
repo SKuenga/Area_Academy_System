@@ -1,0 +1,168 @@
+{
+  "branches": [
+    {
+      "name": "Bakixanov",
+      "latitude": "40.411330",
+      "longitude": "49.968970",
+      "geofencing_radius": 100
+    },
+    {
+      "name": "Narimanov Head Office",
+      "latitude": "40.406860",
+      "longitude": "49.874640",
+      "geofencing_radius": 100
+    },
+    {
+      "name": "Binagadi",
+      "latitude": "40.426030",
+      "longitude": "49.854246",
+      "geofencing_radius": 100
+    },
+    {
+      "name": "Dummy",
+      "latitude": "27.450076",
+      "longitude": "89.365245",
+      "geofencing_radius": 200
+    }
+  ],
+  "users": [
+    {
+      "username": "Admin",
+      "password": "pbkdf2_sha256$1200000$MOwdOx1BnbKHsjbXbtewit$cbomnFJ0ZBYEtRcgDtwcFakvUibh8HqOydZDoNUwt9A=",
+      "last_login": "2026-08-24T08:37:54.319Z",
+      "is_superuser": true,
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-07-23T09:13:38Z",
+      "role": "SUPER_ADMIN",
+      "branch": "Bakixanov"
+    },
+    {
+      "username": "Sacha_Kuenga",
+      "password": "pbkdf2_sha256$1200000$5UzKexx54kX8MgWX2U7mfR$66HbkOeuI+tCBFskR3fPIr/YKd7eWzwelhL5AcT9VJI=",
+      "last_login": "2026-08-12T15:16:53.427Z",
+      "is_superuser": false,
+      "first_name": "Sacha",
+      "last_name": "Kuenga",
+      "email": "tradewithsacha@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-07-23T09:15:20Z",
+      "role": "BRANCH_MANAGER",
+      "branch": "Dummy"
+    },
+    {
+      "username": "employee",
+      "password": "pbkdf2_sha256$1200000$TaMjgHGMjIBQ2aoNcTXRqm$k6XfUaGA7DMWKdRIPNgGBJKSX+c/k1mDc9kyjpH9OL0=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-07-29T09:59:11.307Z",
+      "role": "EMPLOYEE",
+      "branch": "Bakixanov"
+    },
+    {
+      "username": "SKuenga",
+      "password": "pbkdf2_sha256$1200000$g1skYuDdbSb1h3vCjR2VGT$lWs/Zu/PEdCgKRDKC6Vasb9oT+RfyL4wOCVUP6WB+D8=",
+      "last_login": "2026-08-04T14:27:43.425Z",
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-08-04T14:27:11.396Z",
+      "role": "EMPLOYEE",
+      "branch": "Bakixanov"
+    },
+    {
+      "username": "dummyemployee",
+      "password": "pbkdf2_sha256$1200000$OvcqPYtCGTN7Dfk514D2EF$KsNJp/EOvxEm7sTo8jD2cp+PRXLsPVaYGlhRrqO9/gs=",
+      "last_login": "2026-08-11T15:41:50.070Z",
+      "is_superuser": false,
+      "first_name": "Dummy",
+      "last_name": "Employee",
+      "email": "dummy@gmail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-08-05T06:31:23Z",
+      "role": "EMPLOYEE",
+      "branch": "Dummy"
+    }
+  ],
+  "class_sessions": [
+    {
+      "session_name": "Genisis",
+      "day": "Monday, Tuesday, Friday",
+      "start_time": "06:00:00",
+      "end_time": "07:30:00",
+      "instructor": "SKuenga",
+      "branch": "Narimanov Head Office"
+    },
+    {
+      "session_name": "Foundation English",
+      "day": "Monday, Wednesday",
+      "start_time": "09:00:00",
+      "end_time": "10:30:00",
+      "instructor": "Sacha_Kuenga",
+      "branch": "Bakixanov"
+    },
+    {
+      "session_name": "IELTS Speaking",
+      "day": "Tuesday, Thursday",
+      "start_time": "11:00:00",
+      "end_time": "12:30:00",
+      "instructor": "employee",
+      "branch": "Narimanov Head Office"
+    },
+    {
+      "session_name": "Academic Writing",
+      "day": "Wednesday, Friday",
+      "start_time": "04:50:00",
+      "end_time": "16:30:00",
+      "instructor": "Sacha_Kuenga",
+      "branch": "Dummy"
+    }
+  ],
+  "attendance": [
+    {
+      "user": "Sacha_Kuenga",
+      "branch": "Dummy",
+      "check_in_time": "2026-08-05T05:06:54.008Z",
+      "check_out_time": null,
+      "is_verified": true,
+      "status": "LATE"
+    },
+    {
+      "user": "dummyemployee",
+      "branch": "Dummy",
+      "check_in_time": "2026-08-05T06:32:02.428Z",
+      "check_out_time": null,
+      "is_verified": true,
+      "status": "PRESENT"
+    },
+    {
+      "user": "dummyemployee",
+      "branch": "Dummy",
+      "check_in_time": "2026-08-06T15:33:36.556Z",
+      "check_out_time": null,
+      "is_verified": true,
+      "status": "PRESENT"
+    },
+    {
+      "user": "dummyemployee",
+      "branch": "Dummy",
+      "check_in_time": "2026-08-11T08:18:44.911Z",
+      "check_out_time": null,
+      "is_verified": true,
+      "status": "PRESENT"
+    }
+  ]
+}

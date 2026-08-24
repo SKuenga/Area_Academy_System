@@ -26,7 +26,7 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-slate-800">{{ branch_data.summary.branch.name }}</h1>
-                    <p class="text-sm text-slate-500">{{ branch_data.summary.total_employees }} employees · Branch
+                    <p class="text-sm text-slate-500">{{ branch_data.summary.total_employees }} staff · Branch
                         detail overview</p>
                 </div>
             </div>
@@ -56,17 +56,17 @@
             </div>
         </div>
 
-        <!-- ===== MICRO: Employee Table ===== -->
+        <!-- ===== MICRO: Staff Table ===== -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-100">
-                <h3 class="text-base font-semibold text-slate-800">Employee Attendance Breakdown</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Per-employee attendance records</p>
+                <h3 class="text-base font-semibold text-slate-800">Staff Attendance Breakdown</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Per-staff attendance records</p>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-100">
-                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase">Employee</th>
+                            <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase">Staff</th>
                             <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">Present
                             </th>
                             <th class="py-3 px-6 text-xs font-semibold text-slate-500 uppercase text-center">Absent</th>
@@ -82,7 +82,7 @@
                         {% for emp in branch_data.employees %}
                         <tr class="hover:bg-slate-50/50 transition-colors">
                             <td class="py-3 px-6 font-medium text-slate-800">
-                                {{ emp.employee.get_full_name|default:emp.employee.email }}
+                                {{ emp.employee.get_full_name|default:emp.employee.username }}
                             </td>
                             <td class="py-3 px-6 text-center text-emerald-600 font-semibold">{{ emp.present }}</td>
                             <td class="py-3 px-6 text-center text-rose-600 font-semibold">{{ emp.absent }}</td>
@@ -95,7 +95,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7" class="py-10 text-center text-slate-400">No employees found in this branch.
+                            <td colspan="7" class="py-10 text-center text-slate-400">No staff found in this branch.
                             </td>
                         </tr>
                         {% endfor %}
