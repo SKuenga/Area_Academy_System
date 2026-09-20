@@ -12,3 +12,4 @@ class Class_Session(models.Model):
     
     def __str__(self):
         return str(self.instructor) + " - " + self.session_name
+
