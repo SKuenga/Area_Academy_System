@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -183,9 +185,7 @@
 <body>
 
     <div class="card">
-        <div class="brand-badge">
-            <i class="fa-solid fa-graduation-cap"></i> AREA Academy
-        </div>
+            <img src="{% static 'authentication/area_acronym.png' %}" alt="Area Logo" style="width: 120px; height: 36px; border-radius: 12px;">
         <h1>Attendance Check In</h1>
         <p class="subtitle">Confirm your location to log attendance</p>
 
