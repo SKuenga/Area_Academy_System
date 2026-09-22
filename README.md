@@ -16,19 +16,7 @@ Containerized Deployment: Fully dockerized environment for seamless configuratio
 
 The platform operates across three integrated operational layers:
 
-[ User Device ] ──(1. Login & Auth)──> [ Role-Based Access Control ]
-│
-(2. GPS Coordinates)
-▼
-[ Haversine Geofencing Engine ]
-│
-┌─────────────────────┴─────────────────────┐
-(Within Radius) (Out of Bounds)
-▼ ▼
-[ Log Attendance Record ] [ Access Denied Alert ]
-│
-▼
-[ Dynamic Dashboard Routing ]
+<img src="asset/flow_chart.png" alt="Flow-Chart">
 
 ### 1. Secure Authentication Layer
 
