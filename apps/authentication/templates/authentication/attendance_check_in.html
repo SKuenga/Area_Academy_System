@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AREA Academy | Attendance Check In</title>
+
     <!-- Google Font & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,11 +16,17 @@
         :root {
             --primary: #4F46E5;
             --primary-hover: #4338CA;
+            --primary-soft: rgba(79, 70, 229, 0.08);
             --success: #10B981;
             --danger: #EF4444;
-            --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
+
+            --page-bg: #f7f8fc;
+            --surface: rgba(255, 255, 255, 0.72);
+            --surface-solid: #ffffff;
+            --border: rgba(15, 23, 42, 0.08);
+            --text: #172033;
+            --muted: #667085;
+            --soft-muted: #98A2B3;
         }
 
         * {
@@ -31,108 +38,269 @@
 
         body {
             min-height: 100vh;
-            background: var(--bg-gradient);
+            background:
+                radial-gradient(circle at 8% 12%, rgba(79, 70, 229, 0.07), transparent 28%),
+                radial-gradient(circle at 92% 88%, rgba(16, 185, 129, 0.05), transparent 25%),
+                var(--page-bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ---------- Main Split Layout ---------- */
+
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 58% 42%;
+        }
+
+        /* ---------- Left Branding Panel ---------- */
+
+        .brand-panel {
+            position: relative;
+            min-height: 100vh;
+            padding: 48px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: #F8FAFC;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, 0.92),
+                    rgba(245, 247, 255, 0.82));
+            border-left: 1px solid var(--border);
         }
 
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 40px;
-            width: 100%;
-            max-width: 440px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .brand-panel::before {
+            content: "";
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            border-radius: 50%;
+            background: rgba(79, 70, 229, 0.08);
+            filter: blur(5px);
+            top: -130px;
+            left: -120px;
         }
 
-        .brand-badge {
+        .brand-panel::after {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.06);
+            bottom: -110px;
+            right: -80px;
+        }
+
+        .brand-content,
+        .brand-footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-content {
+            max-width: 460px;
+        }
+
+        .brand-logo {
+            width: 120px;
+            height: 36px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 54px;
+        }
+
+        .eyebrow {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(79, 70, 229, 0.15);
-            color: #818CF8;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 16px;
-            border: 1px solid rgba(129, 140, 248, 0.2);
-        }
-
-        h1 {
-            font-size: 1.75rem;
+            color: var(--primary);
+            background: var(--primary-soft);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            padding: 8px 13px;
+            border-radius: 999px;
+            font-size: 0.76rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            color: #FFFFFF;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
         }
 
-        p.subtitle {
-            color: #94A3B8;
-            font-size: 0.95rem;
-            margin-bottom: 32px;
+        .eyebrow-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
         }
 
-        /* Location Icon Display Box */
+        .brand-title {
+            font-size: clamp(2.4rem, 4vw, 4.2rem);
+            line-height: 1.05;
+            letter-spacing: -0.055em;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        .brand-title span {
+            color: var(--primary);
+        }
+
+        .brand-description {
+            max-width: 400px;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .brand-footer {
+            color: var(--soft-muted);
+            font-size: 0.78rem;
+        }
+
+        /* ---------- Right Check-In Area ---------- */
+
+        .checkin-panel {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .checkin-wrapper {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .checkin-card {
+            width: 100%;
+            padding: 42px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            background: var(--surface);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow:
+                0 24px 70px rgba(15, 23, 42, 0.08),
+                0 2px 8px rgba(15, 23, 42, 0.03);
+            text-align: center;
+        }
+
+        .mobile-logo {
+            display: none;
+            width: 112px;
+            height: 34px;
+            object-fit: contain;
+            margin: 0 auto 24px;
+        }
+
+        .checkin-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            border: 1px solid rgba(79, 70, 229, 0.08);
+            font-size: 1.35rem;
+        }
+
+        .checkin-card h1 {
+            font-size: 1.85rem;
+            line-height: 1.2;
+            letter-spacing: -0.035em;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- Location Status ---------- */
+
         .status-container {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 32px;
+            width: 100%;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            margin-bottom: 22px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.52);
             transition: all 0.3s ease;
         }
 
         .status-icon {
-            font-size: 2.5rem;
-            color: #818CF8;
-            margin-bottom: 12px;
+            font-size: 1.65rem;
+            color: var(--primary);
+            margin-bottom: 13px;
             transition: all 0.3s ease;
         }
 
         .status-text {
-            font-size: 0.95rem;
-            color: #CBD5E1;
-            line-height: 1.5;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            max-width: 340px;
         }
 
         .coords {
             font-family: monospace;
-            font-size: 0.85rem;
-            color: #94A3B8;
-            margin-top: 6px;
+            font-size: 0.76rem;
+            color: var(--soft-muted);
+            margin-top: 7px;
         }
 
-        /* Button Styling */
+        #coordsDisplay {
+            font-family: monospace;
+            font-size: 0.76rem;
+            color: var(--soft-muted);
+            margin-top: 7px;
+        }
+
+        /* ---------- Check-In Button ---------- */
+
         .btn-checkin {
             width: 100%;
-            background: var(--primary);
-            color: white;
+            min-height: 54px;
             border: none;
-            padding: 16px 24px;
-            font-size: 1rem;
+            border-radius: 14px;
+            background: var(--primary);
+            color: #fff;
+            padding: 15px 22px;
+            font-size: 0.94rem;
             font-weight: 600;
-            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 24px rgba(79, 70, 229, 0.18);
         }
 
         .btn-checkin:hover {
             background: var(--primary-hover);
             transform: translateY(-1px);
+            box-shadow: 0 13px 28px rgba(79, 70, 229, 0.22);
+        }
+
+        .btn-checkin:active {
+            transform: translateY(0);
         }
 
         .btn-checkin:disabled {
@@ -141,42 +309,108 @@
             transform: none;
         }
 
-        /* Success & Error State Enhancements */
+        /* ---------- Success / Error States ---------- */
+
         .status-container.success {
-            border-color: rgba(16, 185, 129, 0.4);
-            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.22);
+            background: rgba(16, 185, 129, 0.06);
         }
 
         .status-container.success .status-icon {
             color: var(--success);
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         .status-container.error {
-            border-color: rgba(239, 68, 68, 0.4);
-            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.22);
+            background: rgba(239, 68, 68, 0.055);
         }
 
         .status-container.error .status-icon {
             color: var(--danger);
         }
 
-        /* Pulse animation for acquiring location */
+        /* ---------- Pulse Animation ---------- */
+
         .pulse {
             animation: pulse-animation 1.5s infinite;
         }
 
         @keyframes pulse-animation {
             0% {
-                opacity: 0.6;
+                opacity: 0.55;
+                transform: scale(0.96);
             }
 
             50% {
                 opacity: 1;
+                transform: scale(1.04);
             }
 
             100% {
-                opacity: 0.6;
+                opacity: 0.55;
+                transform: scale(0.96);
+            }
+        }
+
+        /* ---------- Responsive ---------- */
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-panel {
+                min-height: auto;
+                padding: 30px 28px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .brand-logo {
+                margin-bottom: 30px;
+            }
+
+            .brand-title {
+                font-size: 2.5rem;
+            }
+
+            .brand-description,
+            .brand-footer {
+                display: none;
+            }
+
+            .checkin-panel {
+                min-height: auto;
+                padding: 40px 24px 60px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .brand-panel {
+                display: none;
+            }
+
+            .checkin-panel {
+                min-height: 100vh;
+                padding: 24px 16px;
+            }
+
+            .mobile-logo {
+                display: block;
+            }
+
+            .checkin-card {
+                padding: 30px 20px;
+                border-radius: 24px;
+            }
+
+            .checkin-card h1 {
+                font-size: 1.65rem;
+            }
+
+            .status-container {
+                min-height: 140px;
             }
         }
     </style>
@@ -184,42 +418,118 @@
 
 <body>
 
-    <div class="card">
-            <img src="{% static 'authentication/area_acronym.png' %}" alt="Area Logo" style="width: 120px; height: 36px; border-radius: 12px;">
-        <h1>Attendance Check In</h1>
-        <p class="subtitle">Confirm your location to log attendance</p>
+    <main class="page">
 
-        <!-- FIXED: The id attribute is now cleanly "statusBox" so JavaScript can find it -->
-        <div class="status-container {% if error %}error{% endif %}" id="statusBox">
-            <i class="{% if error %}fa-solid fa-triangle-exclamation status-icon{% else %}fa-solid fa-location-dot status-icon{% endif %}"
-                id="statusIcon"></i>
-            <!-- FIXED: Fixed double quote typo here ""statusText -->
-            <span id="statusText">
-                {% if error %}
-                {{ error }}
-                {% else %}
-                Please check in to log your attendance.
-                {% endif %}
-            </span>
-            <div id="coordsDisplay"></div>
-        </div>
+        <!-- =========================
+             LEFT CHECK-IN SECTION
+             ========================= -->
+        <section class="checkin-panel">
 
-        <!-- Hidden Form -->
-        <form method="POST" id="attendanceForm">
-            {% csrf_token %}
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">
+            <div class="checkin-wrapper">
 
-            <button type="button" class="btn-checkin" id="checkinBtn" onclick="getLocation()">
-                {% if error %}
-                <!-- FIXED: Fixed double quote typo here ""fa-solid -->
-                <i class="fa-solid fa-rotate-right"></i> Try Again
-                {% else %}
-                <i class="fa-solid fa-crosshairs"></i> Get Location and & Check In
-                {% endif %}
-            </button>
-        </form>
-    </div>
+                <div class="checkin-card">
+
+                    <!-- Mobile-only logo -->
+                    <img src="{% static 'authentication/area_acronym.png' %}" alt="AREA Academy" class="mobile-logo">
+
+                    <div class="checkin-icon">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+
+                    <h1>Attendance Check In</h1>
+
+                    <p class="subtitle">
+                        Confirm your location to log your attendance.
+                    </p>
+
+
+                    <!-- Location Status -->
+                    <div class="status-container {% if error %}error{% endif %}" id="statusBox">
+
+                        <i class="{% if error %}fa-solid fa-triangle-exclamation status-icon{% else %}fa-solid fa-location-dot status-icon{% endif %}"
+                            id="statusIcon"></i>
+
+                        <span id="statusText">
+                            {% if error %}
+                            {{ error }}
+                            {% else %}
+                            Please check in to log your attendance.
+                            {% endif %}
+                        </span>
+
+                        <div id="coordsDisplay"></div>
+
+                    </div>
+
+
+                    <!-- Hidden Form -->
+                    <form method="POST" id="attendanceForm">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" id="latitude" name="latitude">
+
+                        <input type="hidden" id="longitude" name="longitude">
+
+                        <button type="button" class="btn-checkin" id="checkinBtn" onclick="getLocation()">
+
+                            {% if error %}
+
+                            <i class="fa-solid fa-rotate-right"></i>
+                            Try Again
+
+                            {% else %}
+
+                            <i class="fa-solid fa-crosshairs"></i>
+                            Get Location & Check In
+
+                            {% endif %}
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RIGHT BRANDING SECTION
+             ========================= -->
+        <section class="brand-panel">
+
+            <div class="brand-content">
+
+                <img src="{% static 'authentication/area_acronym.png' %}" alt="AREA Academy" class="brand-logo">
+
+                <div class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    Attendance System
+                </div>
+
+                <h2 class="brand-title">
+                    Welcome to<br>
+                    <span>AREA Academy.</span>
+                </h2>
+
+                <p class="brand-description">
+                    A simple and secure way to record your attendance.
+                    Confirm your location and check in when you're ready.
+                </p>
+
+            </div>
+
+            <div class="brand-footer">
+                © AREA Academy · Attendance Management
+            </div>
+
+        </section>
+
+    </main>
+
 
     <script>
         function getLocation() {
@@ -236,6 +546,7 @@
             // Update UI to Loading State
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Acquiring Location...`;
+
             statusIcon.className = "fa-solid fa-satellite-dish status-icon pulse";
             statusText.innerText = "Accessing GPS coordinates...";
 
@@ -249,6 +560,7 @@
                 }
             );
         }
+
 
         function success(position) {
             let latitude = position.coords.latitude.toFixed(6);
@@ -267,7 +579,9 @@
 
             statusBox.className = "status-container success";
             statusIcon.className = "fa-solid fa-circle-check status-icon";
+
             statusText.innerHTML = "<strong>Location Captured!</strong><br>Redirecting...";
+
             coordsDisplay.innerHTML = `Lat: ${latitude} | Lon: ${longitude}`;
 
             btn.innerHTML = `<i class="fa-solid fa-check"></i> Verified`;
@@ -278,13 +592,17 @@
             }, 1500);
         }
 
+
         function error(err) {
             let message = "Unable to retrieve your location.";
+
             if (err.code === err.PERMISSION_DENIED) {
                 message = "Location access was denied. Please enable permissions.";
             }
+
             showError(message);
         }
+
 
         function showError(message) {
             const statusBox = document.getElementById("statusBox");
@@ -302,3 +620,5 @@
     </script>
 
 </body>
+
+</html>
