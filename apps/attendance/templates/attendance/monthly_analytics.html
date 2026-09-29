@@ -1,0 +1,212 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<main class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+        <a href="{% if is_super_admin %}{% url 'super_admin_dashboard' %}{% else %}{% url 'branch_detail' request.user.branch_id %}{% endif %}"
+            class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-600 mb-5">
+            <span aria-hidden="true">←</span> Back to dashboard
+        </a>
+
+        <header class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-6">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-widest text-indigo-600">AREA Academy · Analytics</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Monthly attendance</h1>
+                <p class="text-sm text-slate-500 mt-2">
+                    {% if is_super_admin %}All branches{% else %}{{ request.user.branch.name }}{% endif %}
+                    · {{ month|date:"F Y" }}
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="{{ previous_month_url }}" aria-label="Previous month"
+                    class="flex-1 sm:flex-none text-center rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                    ‹ Previous
+                </a>
+                {% if next_month_url %}
+                <a href="{{ next_month_url }}" aria-label="Next month"
+                    class="flex-1 sm:flex-none text-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">
+                    Next ›
+                </a>
+                {% else %}
+                <span class="flex-1 sm:flex-none text-center rounded-lg border border-slate-200 bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-400"
+                    aria-disabled="true">Next ›</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <form method="get" class="grid grid-cols-1 sm:grid-cols-2 {% if is_super_admin %}lg:grid-cols-4{% else %}lg:grid-cols-3{% endif %} gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 mb-6 shadow-sm">
+            <label class="text-xs font-semibold text-slate-600">
+                Month
+                <input type="month" name="month" value="{{ month|date:'Y-m' }}" max="{{ current_month|date:'Y-m' }}"
+                    class="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-800">
+            </label>
+            {% if is_super_admin %}
+            <label class="text-xs font-semibold text-slate-600">
+                Branch table filter
+                <select name="branch" class="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-800">
+                    <option value="">All branches</option>
+                    {% for item in analytics.branches %}
+                    <option value="{{ item.branch.id }}" {% if selected_branch == item.branch.id|stringformat:"s" %}selected{% endif %}>
+                        {{ item.branch.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+            {% endif %}
+            <label class="text-xs font-semibold text-slate-600">
+                Rank branches by
+                <select name="sort" class="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-800">
+                    <option value="attendance_rate" {% if sort_by == "attendance_rate" %}selected{% endif %}>Attendance rate</option>
+                    <option value="attended" {% if sort_by == "attended" %}selected{% endif %}>Present + late + remote</option>
+                    <option value="late" {% if sort_by == "late" %}selected{% endif %}>Late count</option>
+                    <option value="absent" {% if sort_by == "absent" %}selected{% endif %}>Absent count</option>
+                </select>
+            </label>
+            <button type="submit" class="self-end rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-700">
+                Apply filters
+            </button>
+        </form>
+
+        <section aria-label="Monthly totals" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <p class="text-xs font-medium text-slate-500">Attendance rate</p>
+                <p class="mt-2 text-2xl sm:text-3xl font-bold text-indigo-700">{{ analytics.totals.attendance_rate }}%</p>
+                <p class="mt-1 text-xs text-slate-400">Present + late + remote / recorded statuses</p>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <p class="text-xs font-medium text-slate-500">Present</p>
+                <p class="mt-2 text-2xl sm:text-3xl font-bold text-emerald-700">{{ analytics.totals.present }}</p>
+                <p class="mt-1 text-xs text-slate-400">{{ analytics.totals.present_percentage }}% of recorded statuses</p>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <p class="text-xs font-medium text-slate-500">Absent</p>
+                <p class="mt-2 text-2xl sm:text-3xl font-bold text-rose-700">{{ analytics.totals.absent }}</p>
+                <p class="mt-1 text-xs text-slate-400">{{ analytics.totals.absent_percentage }}% of recorded statuses</p>
+            </article>
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                <p class="text-xs font-medium text-slate-500">Late arrivals</p>
+                <p class="mt-2 text-2xl sm:text-3xl font-bold text-amber-700">{{ analytics.totals.late }}</p>
+                <p class="mt-1 text-xs text-slate-400">Latest status counted once per staff member per day</p>
+            </article>
+        </section>
+
+        {% if is_super_admin %}
+        <section aria-label="Branch highlights" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <article class="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 sm:p-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Highest attended volume</p>
+                {% if analytics.highest_branch %}
+                <p class="mt-2 text-lg font-bold text-slate-900">{{ analytics.highest_branch.branch.name }}</p>
+                <p class="mt-1 text-sm text-slate-600">{{ analytics.highest_branch.attended }} attended records</p>
+                <p class="mt-1 text-xs text-slate-500">Present {{ analytics.highest_branch.present_percentage }}% · absent {{ analytics.highest_branch.absent_percentage }}%</p>
+                {% else %}<p class="mt-2 text-sm text-slate-600">No attendance records this month.</p>{% endif %}
+            </article>
+            <article class="rounded-2xl border border-rose-100 bg-rose-50 p-4 sm:p-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-rose-700">Lowest attended volume</p>
+                {% if analytics.lowest_branch %}
+                <p class="mt-2 text-lg font-bold text-slate-900">{{ analytics.lowest_branch.branch.name }}</p>
+                <p class="mt-1 text-sm text-slate-600">{{ analytics.lowest_branch.attended }} attended records</p>
+                <p class="mt-1 text-xs text-slate-500">Present {{ analytics.lowest_branch.present_percentage }}% · absent {{ analytics.lowest_branch.absent_percentage }}%</p>
+                {% else %}<p class="mt-2 text-sm text-slate-600">No attendance records this month.</p>{% endif %}
+            </article>
+            <article class="rounded-2xl border border-indigo-100 bg-indigo-50 p-4 sm:p-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-indigo-700">Highest attendance rate</p>
+                {% if analytics.highest_rate_branch %}
+                <p class="mt-2 text-lg font-bold text-slate-900">{{ analytics.highest_rate_branch.branch.name }}</p>
+                <p class="mt-1 text-sm text-slate-600">{{ analytics.highest_rate_branch.attendance_rate }}% of recorded statuses</p>
+                {% else %}<p class="mt-2 text-sm text-slate-600">No attendance records this month.</p>{% endif %}
+            </article>
+            <article class="rounded-2xl border border-amber-100 bg-amber-50 p-4 sm:p-5">
+                <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">Lowest attendance rate</p>
+                {% if analytics.lowest_rate_branch %}
+                <p class="mt-2 text-lg font-bold text-slate-900">{{ analytics.lowest_rate_branch.branch.name }}</p>
+                <p class="mt-1 text-sm text-slate-600">{{ analytics.lowest_rate_branch.attendance_rate }}% of recorded statuses</p>
+                {% else %}<p class="mt-2 text-sm text-slate-600">No attendance records this month.</p>{% endif %}
+            </article>
+        </section>
+        {% endif %}
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                <div class="flex items-start justify-between gap-3 mb-4">
+                    <div>
+                        <h2 class="font-bold text-slate-900">Peak attendance day</h2>
+                        <p class="mt-1 text-xs text-slate-500">Share of attended records by weekday.</p>
+                    </div>
+                    {% if analytics.totals.peak_day %}
+                    <span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">{{ analytics.totals.peak_day }}</span>
+                    {% endif %}
+                </div>
+                <div class="space-y-3">
+                    {% for day in analytics.totals.weekday_rows %}
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span class="text-slate-600">{{ day.name }}</span><span class="font-medium text-slate-800">{{ day.count }} · {{ day.percentage }}%</span></div>
+                        <div class="h-2 rounded-full bg-slate-100"><div class="h-2 rounded-full bg-indigo-500" style="width: {{ day.percentage }}%"></div></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                <div class="flex items-start justify-between gap-3 mb-4">
+                    <div>
+                        <h2 class="font-bold text-slate-900">Check-in activity by time</h2>
+                        <p class="mt-1 text-xs text-slate-500">Activity share by local check-in time; a time-band indicator, not scheduled shift occupancy.</p>
+                    </div>
+                    {% if analytics.totals.peak_period %}
+                    <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">{{ analytics.totals.peak_period }}</span>
+                    {% endif %}
+                </div>
+                <div class="space-y-3">
+                    {% for period in analytics.totals.period_rows %}
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span class="text-slate-600">{{ period.name }}</span><span class="font-medium text-slate-800">{{ period.count }} · {{ period.percentage }}%</span></div>
+                        <div class="h-2 rounded-full bg-slate-100"><div class="h-2 rounded-full bg-violet-500" style="width: {{ period.percentage }}%"></div></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+        </section>
+
+        <section class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <div class="px-4 sm:px-6 py-4 border-b border-slate-100">
+                <h2 class="font-bold text-slate-900">{% if is_super_admin %}Branch ranking{% else %}{{ request.user.branch.name }} · monthly breakdown{% endif %}</h2>
+                <p class="mt-1 text-xs text-slate-500">Rates use each staff member’s latest recorded status per day. Unrecorded workdays are not counted as absences.</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[800px] text-sm text-left">
+                    <thead class="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
+                        <tr>
+                            {% if is_super_admin %}<th class="px-4 sm:px-6 py-3">Branch</th>{% endif %}
+                            <th class="px-4 sm:px-6 py-3 text-center">Staff</th>
+                            <th class="px-4 sm:px-6 py-3 text-center">Present</th>
+                            <th class="px-4 sm:px-6 py-3 text-center">Absent</th>
+                            <th class="px-4 sm:px-6 py-3 text-center">Late</th>
+                            <th class="px-4 sm:px-6 py-3 text-center">Remote</th>
+                            <th class="px-4 sm:px-6 py-3 text-center">On leave</th>
+                            <th class="px-4 sm:px-6 py-3 text-center">Attendance rate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for item in analytics.displayed_branches %}
+                        <tr class="hover:bg-slate-50">
+                            {% if is_super_admin %}<td class="px-4 sm:px-6 py-3 font-semibold text-slate-800">{{ item.branch.name }}</td>{% endif %}
+                            <td class="px-4 sm:px-6 py-3 text-center">{{ item.employees }}</td>
+                            <td class="px-4 sm:px-6 py-3 text-center text-emerald-700">{{ item.present }} <span class="text-xs text-slate-400">({{ item.present_percentage }}%)</span></td>
+                            <td class="px-4 sm:px-6 py-3 text-center text-rose-700">{{ item.absent }} <span class="text-xs text-slate-400">({{ item.absent_percentage }}%)</span></td>
+                            <td class="px-4 sm:px-6 py-3 text-center text-amber-700">{{ item.late }}</td>
+                            <td class="px-4 sm:px-6 py-3 text-center text-sky-700">{{ item.remote }}</td>
+                            <td class="px-4 sm:px-6 py-3 text-center text-slate-600">{{ item.leave }}</td>
+                            <td class="px-4 sm:px-6 py-3 text-center font-semibold">{{ item.attendance_rate }}%</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="8" class="px-6 py-10 text-center text-sm text-slate-500">No branches are available.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p class="px-4 sm:px-6 py-3 border-t border-slate-100 text-xs text-slate-400">
+                {{ analytics.totals.total_records }} recorded staff-days · {{ analytics.totals.employees }} currently assigned staff
+            </p>
+        </section>
+    </div>
+</main>

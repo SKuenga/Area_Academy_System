@@ -39,10 +39,14 @@
                         {{ branch_data.summary.total_employees }} staff
                         <span class="hidden xs:inline">·</span>
                         <span class="block xs:inline mt-0.5 xs:mt-0">
-                            Branch detail overview
+                            This month's attendance overview
                         </span>
                     </p>
                 </div>
+                <a href="{% url 'monthly_analytics' %}"
+                    class="ml-auto shrink-0 inline-flex items-center justify-center px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs sm:text-sm font-semibold hover:bg-indigo-700 transition-colors">
+                    Monthly Analytics
+                </a>
             </div>
 
             <!-- Macro Stat Cards -->
@@ -118,7 +122,7 @@
                         </h3>
 
                         <p class="text-xs text-slate-400 mt-0.5">
-                            Per-staff attendance records
+                            This month's per-staff attendance
                         </p>
                     </div>
 

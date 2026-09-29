@@ -38,6 +38,14 @@ Verifies role-based attendance rules and geofence radius boundaries before loggi
 
 <img src="asset/rbd.png" alt="RBD-Info">
 
+### Monthly Attendance Analytics
+
+Super admins can open Monthly Analytics from the admin dashboard to review and rank all branches. Branch managers can open the same month-by-month view for their assigned branch only. Use the month controls to browse completed months, and use the branch table filter and ranking selector to narrow the branch list.
+
+Analytics are calculated from stored attendance records at request time; no background scheduler is required, and historical attendance is not deleted. A staff member's latest status is counted once per day. Attendance rate is the share of recorded statuses that are present, late, or remote; present and absent percentages are shown separately. Unrecorded workdays are not treated as absences. The existing branch detail dashboard shows this month's counts and rolls over automatically at the calendar-month boundary.
+
+Time-of-day activity is grouped into morning, afternoon, and evening using the local check-in time. The system does not yet have scheduled shift assignments, so these groups indicate check-in activity rather than shift occupancy.
+
 ### Tech Stack
 
 Backend Framework: Python / Django (MVT Architecture)
