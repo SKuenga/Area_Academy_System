@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.authentication.models import (
+    PasskeyCeremony,
     PasskeyCredential,
     PasskeyEnrollmentGrant,
     User,
@@ -187,6 +188,113 @@ class PasskeyFlowTests(TestCase):
         )
         self.assertNotEqual(grant.token_digest, raw_token)
         self.assertGreater(grant.expires_at, timezone.now())
+
+    def test_superadmin_can_issue_setup_code_from_employee_detail(self):
+        self.client.force_login(self.super_admin)
+        user_list = self.client.get(reverse("admin:authentication_user_changelist"))
+        change_url = reverse(
+            "admin:authentication_user_change",
+            args=(self.employee.pk,),
+        )
+
+        self.assertEqual(user_list.status_code, 200)
+        self.assertContains(
+            user_list,
+            "Issue passkey setup code (verify employee identity in person)",
+        )
+
+        page = self.client.get(change_url)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, "Issue one-time passkey setup code")
+
+        response = self.client.post(
+            change_url,
+            {"_issue_passkey_setup_code": "Issue one-time passkey setup code"},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        grant = PasskeyEnrollmentGrant.objects.get(user=self.employee)
+        self.assertEqual(grant.created_by, self.super_admin)
+        self.assertContains(response, "One-time passkey setup code")
+
+    def test_non_superadmin_cannot_issue_setup_code_from_employee_detail(self):
+        branch_manager = User.objects.create_user(
+            username="manager",
+            password="A-manager-test-password-42",
+            role=User.Role.BRANCH_MANAGER,
+            is_staff=True,
+        )
+        self.client.force_login(branch_manager)
+        change_url = reverse(
+            "admin:authentication_user_change",
+            args=(self.employee.pk,),
+        )
+
+        response = self.client.post(
+            change_url,
+            {"_issue_passkey_setup_code": "Issue one-time passkey setup code"},
+        )
+
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(PasskeyEnrollmentGrant.objects.filter(user=self.employee).exists())
+
+    def test_passkey_audit_models_are_visible_but_secret_fields_are_hidden(self):
+        self.client.force_login(self.super_admin)
+        raw_token = issue_passkey_enrollment_grant(self.employee, self.super_admin)
+        grant = PasskeyEnrollmentGrant.objects.get(user=self.employee)
+        ceremony = PasskeyCeremony.objects.create(
+            user=self.employee,
+            purpose=PasskeyCeremony.Purpose.LOGIN,
+            challenge="secret-challenge-value",
+            expires_at=timezone.now() + timedelta(minutes=2),
+        )
+
+        grant_list = self.client.get(
+            reverse("admin:authentication_passkeyenrollmentgrant_changelist")
+        )
+        ceremony_list = self.client.get(
+            reverse("admin:authentication_passkeyceremony_changelist")
+        )
+        grant_detail = self.client.get(
+            reverse(
+                "admin:authentication_passkeyenrollmentgrant_change",
+                args=(grant.pk,),
+            )
+        )
+        ceremony_detail = self.client.get(
+            reverse(
+                "admin:authentication_passkeyceremony_change",
+                args=(ceremony.pk,),
+            )
+        )
+
+        self.assertEqual(grant_list.status_code, 200)
+        self.assertEqual(ceremony_list.status_code, 200)
+        self.assertEqual(grant_detail.status_code, 200)
+        self.assertEqual(ceremony_detail.status_code, 200)
+        self.assertNotContains(grant_detail, raw_token)
+        self.assertNotContains(grant_detail, grant.token_digest)
+        self.assertNotContains(ceremony_detail, ceremony.challenge)
+
+    def test_credential_cannot_be_manually_added_or_changed_in_admin(self):
+        self.client.force_login(self.super_admin)
+        credential = self._credential()
+
+        add_response = self.client.get(
+            reverse("admin:authentication_passkeycredential_add")
+        )
+        change_response = self.client.get(
+            reverse(
+                "admin:authentication_passkeycredential_change",
+                args=(credential.pk,),
+            )
+        )
+
+        self.assertEqual(add_response.status_code, 403)
+        self.assertEqual(change_response.status_code, 200)
+        self.assertContains(change_response, "Personal phone")
 
     def test_enrollment_requires_valid_code_and_matching_username(self):
         raw_token = issue_passkey_enrollment_grant(self.employee, self.super_admin)
