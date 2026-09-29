@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-^0aw4k6^cc%(922gj!vla)1ng+t%(7xl%0b!252&1ei5o_hiv2
 
 # SECURITY WARNING: don't run with debug turned on in production!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'Zp1B_beGtLrNHkqXLVsFPlFUrXSlI7g_W6-wXU3_u1Z8yCdnKvODsD99cq6hDaZZ0Fk')
-DEBUG = os.environ.get('DEBUG', 'False')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
