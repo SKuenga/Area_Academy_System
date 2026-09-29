@@ -139,3 +139,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 AUTH_USER_MODEL = "authentication.User"
+
+WEBAUTHN_RP_NAME = os.environ.get(
+    "WEBAUTHN_RP_NAME",
+    "AREA Academy Attendance",
+)
+WEBAUTHN_RP_ID = os.environ.get(
+    "WEBAUTHN_RP_ID",
+    "localhost" if DEBUG else "",
+)
+WEBAUTHN_ORIGIN = os.environ.get(
+    "WEBAUTHN_ORIGIN",
+    "http://localhost:8000" if DEBUG else "",
+)

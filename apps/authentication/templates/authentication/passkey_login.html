@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify your device | AREA Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center p-6">
+    <main class="w-full max-w-md rounded-xl bg-white p-8 shadow-sm">
+        <h1 class="text-2xl font-semibold">Verify your device</h1>
+        <p class="mt-3 text-sm text-slate-600">
+            Confirm with the passkey registered to your account. Your biometric or PIN
+            stays on your device.
+        </p>
+        <form class="mt-6" id="passkey-form"
+            data-complete-url="{% url 'passkey_login_complete' %}">
+            {% csrf_token %}
+            <button
+                class="w-full rounded-md bg-slate-900 px-4 py-3 font-medium text-white disabled:opacity-60"
+                id="verify-passkey"
+                type="button"
+            >
+                Verify with this device
+            </button>
+        </form>
+        <p class="mt-4 min-h-6 text-sm text-slate-700" id="passkey-status" role="status" aria-live="polite">
+            Use your device's screen lock when prompted.
+        </p>
+        <p class="mt-6 text-sm">
+            <a class="text-blue-700 hover:underline" href="{% url 'login' %}">Return to login</a>
+        </p>
+        {{ options|json_script:"passkey-options" }}
+    </main>
+    <script src="{% static 'authentication/passkey.js' %}" defer></script>
+</body>
+</html>
