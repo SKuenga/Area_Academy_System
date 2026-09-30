@@ -11,5 +11,6 @@ class Class_Session(models.Model):
     branch = models.ForeignKey(Branch, on_delete = models.CASCADE)
     
     def __str__(self):
-        return str(self.instructor) + " - " + self.session_name
+        return str(self.instructor) + " - " + self.session_name + " - " + str(self.branch)
+    
 
