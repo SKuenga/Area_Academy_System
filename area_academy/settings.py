@@ -90,13 +90,18 @@ DATABASES = {
         # Replace the string below with your local PostgreSQL credentials:
         # postgres://<user>:<password>@<host>:<port>/<dbname>
         default=os.environ.get(
-            'DATABASE_URL',
+            'PRODUCTION_DATABASE_URL', 
             f'postgres://postgres:{password}@localhost:5432/{local_db_name}'
-        ),
-        conn_max_age=600,
-        conn_health_checks=True,
+        )
     )
 }
+
+
+DATABASES['default']['CONN_MAX_AGE'] = 600
+DATABASES['default']['CONN_HEALTH_CHECKS'] = True
+
+if os.environ.get('PRODUCTION_DATABASE_URL'):
+    DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 
 # Password validation
