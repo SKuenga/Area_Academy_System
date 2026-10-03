@@ -1,4 +1,12 @@
-<script src="https://cdn.tailwindcss.com"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Dashboard | AREA Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
 
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
@@ -18,7 +26,7 @@
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-5 sm:mb-6">
 
             <!-- Branch Information -->
-            <div class="flex items-start sm:items-center gap-3 sm:gap-4">
+            <div class="flex flex-wrap items-start sm:items-center gap-3 sm:gap-4">
 
                 <!-- Icon -->
                 <div
@@ -44,7 +52,7 @@
                     </p>
                 </div>
                 <a href="{% url 'monthly_analytics' %}"
-                    class="ml-auto shrink-0 inline-flex items-center justify-center px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs sm:text-sm font-semibold hover:bg-indigo-700 transition-colors">
+                    class="ml-auto w-full sm:w-auto shrink-0 inline-flex items-center justify-center px-3 py-2 rounded-lg bg-indigo-600 text-white text-xs sm:text-sm font-semibold hover:bg-indigo-700 transition-colors">
                     Monthly Analytics
                 </a>
             </div>
@@ -126,19 +134,35 @@
                         </p>
                     </div>
 
-                    <!-- Mobile scroll hint -->
-                    <div class="flex items-center gap-1.5 text-[10px] text-slate-400 sm:hidden mt-1">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 5l7 7-7 7M6 12h14" />
-                        </svg>
-                        Swipe to view more
-                    </div>
                 </div>
             </div>
 
-            <!-- Responsive Table Container -->
-            <div class="overflow-x-auto overscroll-x-contain">
+            <!-- Mobile staff cards -->
+            <div class="sm:hidden divide-y divide-slate-100">
+                {% for emp in branch_data.employees %}
+                <article class="p-4">
+                    <h4 class="font-semibold text-slate-900 break-words">
+                        {{ emp.employee.get_full_name|default:emp.employee.username }}
+                    </h4>
+                    <dl class="mt-3 grid grid-cols-3 gap-x-3 gap-y-3 text-xs">
+                        <div><dt class="text-slate-500">Present</dt><dd class="mt-1 font-semibold text-emerald-700">{{ emp.present }}</dd></div>
+                        <div><dt class="text-slate-500">Absent</dt><dd class="mt-1 font-semibold text-rose-700">{{ emp.absent }}</dd></div>
+                        <div><dt class="text-slate-500">Late</dt><dd class="mt-1 font-semibold text-amber-700">{{ emp.late }}</dd></div>
+                        <div><dt class="text-slate-500">Remote</dt><dd class="mt-1 font-semibold text-sky-700">{{ emp.remote }}</dd></div>
+                        <div><dt class="text-slate-500">On leave</dt><dd class="mt-1 font-semibold text-purple-700">{{ emp.leave }}</dd></div>
+                        <div class="col-span-3">
+                            <dt class="text-slate-500">Last seen</dt>
+                            <dd class="mt-1 font-medium text-slate-700">{{ emp.last_attendance.check_in_time|date:"M d, Y, g:i:s A"|default:"-" }}</dd>
+                        </div>
+                    </dl>
+                </article>
+                {% empty %}
+                <p class="px-4 py-10 text-center text-sm text-slate-500">No staff found in this branch.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Desktop table -->
+            <div class="hidden sm:block overflow-x-auto overscroll-x-contain">
                 <table class="w-full min-w-[760px] text-left text-sm">
 
                     <!-- Table Header -->
@@ -261,3 +285,5 @@
 
     </div>
 </div>
+</body>
+</html>

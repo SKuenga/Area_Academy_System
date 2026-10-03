@@ -1,4 +1,12 @@
-<script src="https://cdn.tailwindcss.com"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Analytics | AREA Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
 
 <main class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50/30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
@@ -172,7 +180,29 @@
                 <h2 class="font-bold text-slate-900">{% if is_super_admin %}Branch ranking{% else %}{{ request.user.branch.name }} · monthly breakdown{% endif %}</h2>
                 <p class="mt-1 text-xs text-slate-500">Rates use each staff member’s latest recorded status per day. Unrecorded workdays are not counted as absences.</p>
             </div>
-            <div class="overflow-x-auto">
+            <div class="sm:hidden divide-y divide-slate-100">
+                {% for item in analytics.displayed_branches %}
+                <article class="p-4">
+                    <div class="flex items-start justify-between gap-3">
+                        <h3 class="min-w-0 font-semibold text-slate-900 break-words">{{ item.branch.name }}</h3>
+                        <span class="shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700">
+                            {{ item.attendance_rate }}%
+                        </span>
+                    </div>
+                    <p class="mt-1 text-xs text-slate-500">{{ item.employees }} staff</p>
+                    <dl class="mt-4 grid grid-cols-3 gap-x-3 gap-y-3 text-xs">
+                        <div><dt class="text-slate-500">Present</dt><dd class="mt-1 font-semibold text-emerald-700">{{ item.present }} <span class="font-normal text-slate-400">({{ item.present_percentage }}%)</span></dd></div>
+                        <div><dt class="text-slate-500">Absent</dt><dd class="mt-1 font-semibold text-rose-700">{{ item.absent }} <span class="font-normal text-slate-400">({{ item.absent_percentage }}%)</span></dd></div>
+                        <div><dt class="text-slate-500">Late</dt><dd class="mt-1 font-semibold text-amber-700">{{ item.late }}</dd></div>
+                        <div><dt class="text-slate-500">Remote</dt><dd class="mt-1 font-semibold text-sky-700">{{ item.remote }}</dd></div>
+                        <div><dt class="text-slate-500">On leave</dt><dd class="mt-1 font-semibold text-slate-600">{{ item.leave }}</dd></div>
+                    </dl>
+                </article>
+                {% empty %}
+                <p class="px-4 py-10 text-center text-sm text-slate-500">No branches are available.</p>
+                {% endfor %}
+            </div>
+            <div class="hidden sm:block overflow-x-auto">
                 <table class="w-full min-w-[800px] text-sm text-left">
                     <thead class="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-500">
                         <tr>
@@ -210,3 +240,5 @@
         </section>
     </div>
 </main>
+</body>
+</html>
